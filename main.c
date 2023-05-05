@@ -21,53 +21,42 @@ C_Node *push(C_Node *head, int number) {
 
 // Задание множества
 C_Node *assignment(C_Node *head) {
-    int number, count;
-    puts("Enter the number of elements:");
-    while (!scanf("%d", &count)) {
-        fflush(stdin);
-        puts("ERROR! Count of numbers must be integer!");
-        puts("Enter the number of elements:");
-    }
-    for (int i = 0; i < count; i++) {
+    char input[16];
+    while ((strcmp(input, "stop") != 0)) {
         puts("Enter the element:");
-        while (!scanf("%d", &number)) {
-            fflush(stdin);
-            puts("Numbers must be integer!");
-            puts("Enter the element:");
+        scanf("%s", input);
+        int number = atoi(input);
+        if (number != 0 || *input == '0'){
+            head = push(head, number);
         }
-        head = push(head, number);
     }
     return head;
-}
-
-// Вывод элемента
-void printList(C_Node *head) {
-    while (head) {
-        printf("%d", head->value);
-        head = head->next;
-        putchar('\n');
-    }
 }
 
 // Перевод из 10СС в 2СС
 char* convert(int number) {
     int i = 0;
+    if (number == 0) return "0";
     char *bin_number = (char *)malloc(LEN * sizeof(char));
-    while (number > 0) {
+    for (;number > 0; number >>= 1) {
         bin_number[i++] = (number & 1) + '0';
-        number >>= 1;
     }
     bin_number[i] = '\0';
     strrev(bin_number);
     return bin_number;
 }
 
+void printList(C_Node *head) {
+    while (head) {
+        printf("%d - %s\n", head->value, convert(head->value));
+        head = head->next;
+    }
+}
+
 int main() {
     C_Node* current_set = NULL;
     current_set = assignment(current_set);
-    while (current_set) {
-        printf("%d - %s\n", current_set->value, convert(current_set->value));
-        current_set = current_set->next;
-    }
+    printList(current_set);
     return 0;
 }
+
